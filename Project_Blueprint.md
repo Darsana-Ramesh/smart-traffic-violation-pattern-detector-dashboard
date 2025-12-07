@@ -28,27 +28,27 @@ The application follows a modular architecture where `app.py` serves as the entr
 
 ```mermaid
 graph TD
-    User[User] -->|Interacts| App[Streamlit App (app.py)]
+    User[User] -->|Interacts| App["Streamlit App (app.py)"]
     
     subgraph "Frontend Layer (Pages)"
         App --> Sidebar[Sidebar Navigation]
-        App --> HomePage[00_Home_Page.py]
-        App --> Dashboard[app.py (Dashboard View)]
-        App --> Numerical[01_Numerical_Analysis.py]
-        App --> Viz[02_Visualize_Data.py]
-        App --> Trends[03_Trend_Analysis.py]
-        App --> Map[04_Map_Visualization.py]
-        App --> Upload[09_Upload_Dataset.py]
+        App --> HomePage["00_Home_Page.py"]
+        App --> Dashboard["app.py (Dashboard View)"]
+        App --> Numerical["01_Numerical_Analysis.py"]
+        App --> Viz["02_Visualize_Data.py"]
+        App --> Trends["03_Trend_Analysis.py"]
+        App --> Map["04_Map_Visualization.py"]
+        App --> Upload["09_Upload_Dataset.py"]
     end
     
     subgraph "Core Logic Layer (core/)"
-        Sidebar --> Utils[utils.py]
-        Dashboard --> Summary[dashboard_summary.py]
-        Dashboard --> DashPlots[dashboard_plot.py]
-        Viz --> VizPlots[visualize_plot.py]
-        Trends --> TrendPlots[trend_plot.py]
-        Map --> MapPlots[map_plot.py]
-        Upload --> Generator[data_generator.py]
+        Sidebar --> Utils["utils.py"]
+        Dashboard --> Summary["dashboard_summary.py"]
+        Dashboard --> DashPlots["dashboard_plot.py"]
+        Viz --> VizPlots["visualize_plot.py"]
+        Trends --> TrendPlots["trend_plot.py"]
+        Map --> MapPlots["map_plot.py"]
+        Upload --> Generator["data_generator.py"]
         
         Summary & VizPlots & TrendPlots & MapPlots --> Utils
     end
@@ -113,12 +113,12 @@ The project is organized to separate concerns between UI (Pages), Logic (Core), 
 
 | Module File | Description | Key Functions |
 | :--- | :--- | :--- |
-| **`app.py`** (Root) | Main orchestration. | `dashboard()`: Main executive summary view.<br>`st.navigation`: Routing logic. |
-| **`utils.py`** | Utilities & Helpers. | `filter_the_dataset`: Cleans data & parses dates.<br>`get_last_n_days_data`: Filters recent data.<br>`get_data_quality_analysis`: Returns missing/duplicate stats. |
-| **`dashboard_summary.py`** | Dashboard Metrics. | `get_violations_summary_of_last_n_days`: Violation counts.<br>`get_total_fines_generated`: Revenue stats.<br>`get_behavioral_analysis`: Risk indicators (speeding/weather). |
+| **`app.py`** (Root) | Main orchestration. | `dashboard()`: Main executive summary view; `st.navigation`: Routing logic. |
+| **`utils.py`** | Utilities & Helpers. | `filter_the_dataset`: Cleans data & parses dates; `get_last_n_days_data`: Filters recent data; `get_data_quality_analysis`: Returns missing/duplicate stats. |
+| **`dashboard_summary.py`** | Dashboard Metrics. | `get_violations_summary_of_last_n_days`: Violation counts; `get_total_fines_generated`: Revenue stats; `get_behavioral_analysis`: Risk indicators (speeding/weather). |
 | **`dashboard_plot.py`** | Dashboard Charts. | Basic pie/bar charts for the executive summary. |
 | **`visualize_plot.py`** | Advanced Plots. | `plot_severity_heatmap_by_location`, `plot_vehicle_type_vs_violation_type`, `plot_correlation_heatmap`. |
-| **`trend_plot.py`** | Trend Plots. | `plot_trend_analysis_line`: Custom line charts.<br>`plot_categorical_heatmap`. |
+| **`trend_plot.py`** | Trend Plots. | `plot_trend_analysis_line`: Custom line charts; `plot_categorical_heatmap`. |
 | **`map_plot.py`** | Mapping Logic. | `plot_choropleth_map`: Generates Folium map layers. |
 | **`data_generator.py`** | Synthetic Data. | `generate_dataset_by_days`: Creates realistic fake data using `Faker` and probabilities defined in `data_variables.py`. |
 | **`data_variables.py`** | Configuration. | Stores lists of states, violation types, vehicle types, and mappings for data generation. |
