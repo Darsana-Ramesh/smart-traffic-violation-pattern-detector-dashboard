@@ -134,7 +134,7 @@ def dashboard() -> None:
                 avg_violations_per_location = summary.get('total_no_of_violations', 0)//location_based_summary.get('total_locations', 0)
                 st.metric(label="Avg Violations/Location", value=f"{avg_violations_per_location}")
         st.markdown('---') 
-
+        st.markdown('---')
 
 # ==========================================================================================================  
     # Additional Dashboard Metrics Overview
@@ -183,6 +183,7 @@ def dashboard() -> None:
              with c4: st.metric("Common Payment", global_metrics.get('common_payment', 'N/A'))
 
         st.markdown('---')
+      
 # ==========================================================================================================
     # BEHAVIOR & ENVIRONMENTAL ANALYSIS
 # ==========================================================================================================
