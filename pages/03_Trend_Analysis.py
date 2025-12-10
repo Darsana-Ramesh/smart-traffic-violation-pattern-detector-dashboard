@@ -261,14 +261,14 @@ def render_hardcoded_trend_plots(df):
             else:
                  st.info("No data to plot.")
 
-    # 1. Monthly Trend Section
-    render_single_trend_section(df_plot, 'Month', "Monthly Trend by Violation Type", "monthly", "Month")
-    st.markdown("---")
 
     # 2. Yearly Trend Section
     render_single_trend_section(df_plot, 'Year', "Yearly Trend by Violation Type", "yearly", "Year")
     st.markdown("---")
 
+    # 1. Monthly Trend Section
+    render_single_trend_section(df_plot, 'Month', "Monthly Trend by Violation Type", "monthly", "Month")
+    st.markdown("---")
 # ===============================================================================================
 # --- MOVED LINE PLOTS (FROM VISUALIZE DATA) ---
 # ===============================================================================================

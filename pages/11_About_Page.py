@@ -140,8 +140,8 @@ with st.container(border=True):
     with t3:
         st.markdown("#### Data Management")
         st.markdown("""
-        - **CSV/JSON** - Data Storage  
-        - **Matplotlib/Seaborn** - Visualization Engine  
+        - **CSV** - Data Storage  
+        - **Matplotlib/Seaborn/Streamlit** - Visualization Engine  
         - **Folium** - Geospatial Mapping  
         """)
 
@@ -173,17 +173,14 @@ with st.container(border=True):
         
         **2. AI/ML Forecasting**  
         Implement predictive models (ARIMA/Prophet) to forecast future violation hotspots and revenue.
-        
-        **3. Role-Based Access Control (RBAC)**  
-        Secure login for admins, officers, and public viewers.
         """)
         
     with r2:
         st.markdown("""
-        **4. Automated Reporting**  
+        **3. Automated Reporting**  
         Generate and email PDF/Excel reports to authorities automatically on a schedule.
         
-        **5. Live Camera Feed Integration**  
+        **4. Live Camera Feed Integration**  
         Connect to traffic camera APIs for real-time violation detection integration.
         """)
         

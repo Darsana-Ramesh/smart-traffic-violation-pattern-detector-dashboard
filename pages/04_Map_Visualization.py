@@ -147,7 +147,8 @@ if 'Driver_Age' in df.columns:
         df_age['Driver_Age'] = pd.to_numeric(df_age['Driver_Age'], errors='coerce')
         map_data_age = df_age.groupby(default_loc_col)['Driver_Age'].mean().reset_index()
         map_data_age.columns = [default_loc_col, 'Avg Age']
-        render_choropleth_map_on_page(map_data_age, geojson_data, default_loc_col, 'Avg Age', state_prop_name, color_theme="OrRd", title="Average Driver's Age")
+        #All Color Themes Options: OrRd, YlOrRd, PuBuGn, YlGnBu, RdBu, BrBG, PiYG, PRGn, PuOr, Set1, Set2, Set3, Pastel1, Pastel2, Accent, Dark2, Paired, Set1, Set2, Set3, Pastel1, Pastel2, Accent, Dark2, Paired
+        render_choropleth_map_on_page(map_data_age, geojson_data, default_loc_col, 'Avg Age', state_prop_name, color_theme="BrBG", title="Average Driver's Age")
     except Exception as e:
          st.error(f"Could not generate Avg Driver's Age map: {e}")
 else:
