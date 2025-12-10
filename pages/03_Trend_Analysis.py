@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from core.sidebar import render_sidebar
 import core.trend_plot as trend_plot
-import core.visualize_plot as visualize_plot
 import matplotlib.pyplot as plt
 
 # ------------------------------
@@ -343,15 +342,10 @@ def render_plot_item(title, insight, plot_func, team_member_name, df_local, key_
             
             with col_insight:
                 st.markdown("#### Statistics")
-                st.metric("Total Records", total_records, help=f"Created by: {team_member_name}")
-                st.write("Date Range:")
-                st.write(date_range_str)
-                st.divider()
+                st.metric("Total Records", total_records)
                 st.info(f"**💡 Insight:**\n\n{insight}")
             
             st.markdown("---")
-
-
 
 # ===============================================================================================
 # --- Custom Trend Line Plot ---
@@ -602,8 +596,8 @@ st.markdown('<h2 id="time-series-analysis" style="text-align: center;">Time Seri
 render_hardcoded_trend_plots(df)
 render_plot_item(
     "Peak Hour Traffic", 
-    "Identifies the time of day with the highest traffic volume and violations.",
-    visualize_plot.plot_peak_hour_traffic,
+    "This line graph tracks violation counts by hour of the day. It clearly identifies peak time windows where traffic offenses are most frequent, useful for scheduling patrol shifts.",
+    trend_plot.plot_peak_hour_traffic,
     "Rakshitha", df, "rakshitha_1_moved"
 )
 st.markdown("---")
@@ -612,24 +606,26 @@ st.markdown("---")
 st.markdown('<h2 id="financial-impact-analysis" style="text-align: center;">Financial Impact Analysis</h3>', unsafe_allow_html=True)
 render_plot_item(
     "Total Fines Per Year", 
-    "Tracks revenue trends over time, indicating changes in enforcement or violation frequency.",
-    visualize_plot.plot_fines_per_year,
+    "This trend line visualizes the total revenue generated from fines over the years. Sharp rises or drops may indicate changes in traffic laws, enforcement intensity, or driver behavior.",
+    trend_plot.plot_fines_per_year,
     "Amith", df, "amith_2_moved"
 )
-render_plot_item(
-    "Avg Fine by Location", 
-    "Compares the average fine amount collected across different geographic locations.",
-    visualize_plot.plot_avg_fine_location_line,
-    "Ishwari", df, "ishwari_2_moved"
-)
+# ===================== Removed Plot ===========================
+# render_plot_item(
+#     "Avg Fine by Location", 
+#     "This chart displays the average fine amount collected for each location. It highlights areas where violations tend to be more severe (and thus more expensive) rather than just frequent.",
+#     trend_plot.plot_avg_fine_location_line,
+#     "Ishwari", df, "ishwari_2_moved"
+# )
+# ===================== End of Removed Plot ===========================
 st.markdown("---")
 
 # 3. SEVERITY & RISK
 st.markdown('<h2 id="severity-risk-analysis" style="text-align: center;">Severity & Risk Analysis</h3>', unsafe_allow_html=True)
 render_plot_item(
     "Driver Risk by Age Group", 
-    "Demographic analysis showing which age groups are considered higher risk.",
-    visualize_plot.plot_driver_risk_by_age,
+    "This plot breaks down the calculated risk level for different driver age groups. It reveals which demographics are statistically more likely to engage in risky driving behaviors.",
+    trend_plot.plot_driver_risk_by_age,
     "Saniya", df, "saniya_2_moved"
 )
 st.markdown("---")

@@ -21,7 +21,7 @@ st.markdown("Comprehensive statistical breakdown of the dataset.")
 quick_navigator = """
     <style>
         .nav-container {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(168, 85, 247, 0.95));
+            background-color: transparent;
             backdrop-filter: blur(10px);
             padding: 16px;
             border-radius: 12px;
@@ -120,10 +120,8 @@ quick_navigator = """
         <div class="nav-header">Analysis Navigator</div>
         <div class="nav-links">
             <a class="nav-pill" href="#dataset-information" target="_self">Dataset Info</a>
-            <a class="nav-pill" href="#violation-type-statistics" target="_self">Violations</a>
-            <a class="nav-pill" href="#demographic-analysis" target="_self">Demographics</a>
+            <a class="nav-pill" href="#violation-statistics-and-fine-analysis" target="_self">Violations & Fines</a>
             <a class="nav-pill" href="#vehicle-and-fine-analysis" target="_self">Vehicles</a>
-           <!-- <a class="nav-pill" href="#speeding-analysis-by-zone" target="_self">Speeding</a> -->
             <a class="nav-pill" href="#environmental-impact" target="_self">Environment</a>
             <a class="nav-pill" href="#hourly-violation-patterns" target="_self">Hourly</a>
             <a class="nav-pill" href="#custom-tabular-analysis" target="_self">Custom</a>
@@ -184,28 +182,27 @@ with st.expander("Filters", expanded=True):
 st.markdown("---")
 
 st.markdown('<h2 id="dataset-info" style="text-align: center;">Dataset Information</h3>', unsafe_allow_html=True)
-
-# ==========================================================================================================
+# -----------------------------------d
 # Missing Duplicate Value Analysis
-st.subheader('Missing Duplicate Value Analysis')
+# -----------------------------------
+st.subheader("Missing Duplicate Value Analysis")
+st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
 data_quality_df = utils.get_data_quality_analysis(df)
 st.dataframe(data_quality_df, width='stretch', hide_index=True)   
-
-st.markdown('---')     
-
-
-# Display the first 5 rows of the dataframe
+# -----------------------------------
+# 5 Sample Rows
+# -----------------------------------
 st.subheader("5 Sample Rows of the Dataset")
+st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
 with st.expander("5 Sample Rows", expanded=True):
     st.write(df_filtered.sample(5))
 st.markdown("---")
-
-# ------------------------------
-# COMBINED DATASET INFORMATION
-# ------------------------------
-st.markdown('<h2 id="dataset-info" style="text-align: center;">Combined Dataset Information</h3>', unsafe_allow_html=True)
+# -----------------------------------
+# Column Information
+# -----------------------------------
+st.subheader('Column Information')
 st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
-with st.expander("Combined Dataset Information", expanded=True):
+with st.expander("Column Information", expanded=True):
     # Create a new dataframe for column information
     info_df = pd.DataFrame({
         'Field': df_filtered.columns,
@@ -229,7 +226,8 @@ st.markdown("---")
 # ------------------------------------------------------------------------
 # 1. Violation Type Statistics
 # -------------------------------------------------------------------------
-st.markdown('<h2 id="violation-stats" style="text-align: center;">Violation Type Statistics</h3>', unsafe_allow_html=True)
+st.markdown('<h2 id="violation-stats" style="text-align: center;">Violation Statistics & Fine Analysis</h3>', unsafe_allow_html=True)
+st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
 with st.expander("Analysis by Violation Type", expanded=True):
     violation_stats = utils.get_violation_stats_table(df_filtered)
     if not violation_stats.empty:
@@ -247,21 +245,11 @@ with st.expander("Analysis by Violation Type", expanded=True):
     else:
         st.info("Data unavailable for Violation Type analysis.")
 
-# 2. Demographic Pivot
-# -------------------------------------------------------------------------
-st.markdown("---")
-st.markdown('<h2 id="demographic-analysis" style="text-align: center;">Demographic Analysis</h3>', unsafe_allow_html=True)
-with st.expander("Gender Distribution by Violation (Pivot Table)", expanded=True):
-    demo_pivot = utils.get_demographic_pivot(df_filtered)
-    if not demo_pivot.empty:
-        st.dataframe(demo_pivot, width='stretch')
-    else:
-        st.info("Demographic data unavailable.")
-
-# 3. Vehicle Analysis
+# 2. Vehicle Analysis
 # -------------------------------------------------------------------------
 st.markdown("---")
 st.markdown('<h2 id="vehicle-analysis" style="text-align: center;">Vehicle & Fine Analysis</h3>', unsafe_allow_html=True)
+st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
 with st.expander("Fines by Vehicle Type & Year", expanded=True):
     vehicle_stats = utils.get_vehicle_analysis_table(df_filtered)
     if not vehicle_stats.empty:
@@ -277,31 +265,11 @@ with st.expander("Fines by Vehicle Type & Year", expanded=True):
     else:
         st.info("Vehicle data unavailable.")
 
-# 4. Speeding Analysis
-# -------------------------------------------------------------------------
-# st.markdown("---")
-# st.markdown('<h2 id="speeding-analysis" style="text-align: center;">Speeding Analysis by Zone</h3>', unsafe_allow_html=True)
-# with st.expander("Excess Speed Stats by Limits", expanded=True):
-#     speed_stats = utils.get_speeding_analysis_by_zone(df_filtered)
-#     if not speed_stats.empty:
-#         format_dict = {}
-#         if "Avg Excess Speed" in speed_stats.columns:
-#             format_dict["Avg Excess Speed"] = "{:.2f} km/h"
-#         if "Max Excess Speed" in speed_stats.columns:
-#             format_dict["Max Excess Speed"] = "{:.2f} km/h"
-            
-#         st.dataframe(
-#             speed_stats.style.format(format_dict),
-#             width='stretch',
-#             hide_index=True
-#         )
-#     else:
-#         st.info("No speeding data available.")
-
-# 5. Environmental Impact
+# 3. Environmental Impact
 # -------------------------------------------------------------------------
 st.markdown("---")
 st.markdown('<h2 id="environmental-impact" style="text-align: center;">Environmental Impact</h3>', unsafe_allow_html=True)
+st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
 with st.expander("Violations by Weather & Road Condition", expanded=True):
     env_stats = utils.get_environmental_stats(df_filtered)
     if not env_stats.empty:
@@ -309,23 +277,25 @@ with st.expander("Violations by Weather & Road Condition", expanded=True):
     else:
         st.info("Environmental data unavailable.")
 
-# 6. Hourly Patterns
+# 4. Hourly Patterns
 # -------------------------------------------------------------------------
 st.markdown("---")
 st.markdown('<h2 id="hourly-patterns" style="text-align: center;">Hourly Violation Patterns</h3>', unsafe_allow_html=True)
+st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
 with st.expander("Day of Week vs Hour (Pivot)", expanded=True):
     hourly_pivot = utils.get_hourly_patterns_table(df_filtered)
     if not hourly_pivot.empty:
         # highlighting max values for better readability in table form
-        st.dataframe(hourly_pivot.style.background_gradient(axis=None, cmap="YlOrRd"), width='stretch')
+        # use simple gradient for better readability
+        st.dataframe(hourly_pivot.style.background_gradient(axis=None, cmap='terrain'), width='stretch')
     else:
         st.info("Time Series data unavailable.")
 
-# 7. Custom Analysis
+# 5. Custom Analysis
 # -------------------------------------------------------------------------
 st.markdown("---")
 st.markdown('<h2 id="custom-analysis" style="text-align: center;">Custom Tabular Analysis</h3>', unsafe_allow_html=True)
-st.markdown("Build your own analysis table by selecting grouping parameters and metrics.")
+st.write("This section provides a combined view of column names, data types, and descriptive statistics for the filtered data.")
 
 with st.expander("🛠️ Custom Grouping & Aggregation", expanded=True):
     # Separate columns by type

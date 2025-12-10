@@ -5,34 +5,73 @@ import matplotlib.ticker as mtick
 
 # This module handles plots for the Dashboard (Home Page)
 
+# ---------------------------------------------------------
+# UNIFORM STYLE CONFIGURATION
+# ---------------------------------------------------------
+# Define standard formatting constants
+TITLE_SIZE = 22
+LABEL_SIZE = 20
+TICK_SIZE = 20
+TITLE_WEIGHT = 'bold'
+LABEL_WEIGHT = 'bold'
+TICK_WEIGHT = 'bold'
+FIG_SIZE = (16, 9)
+
+# Define a standard color family (High intensity, distinct colors)
+UNI_PALETTE = "deep" 
+
+def apply_plot_style():
+    """
+    Applies the uniform style settings to matplotlib and seaborn.
+    Call this at the start of plot functions or globally.
+    """
+    sns.set_theme(style="whitegrid", context="talk", palette=UNI_PALETTE)
+    plt.rcParams.update({
+        'font.family': 'sans-serif',
+        'font.size': TICK_SIZE,
+        'axes.titlesize': TITLE_SIZE,
+        'axes.titleweight': TITLE_WEIGHT,
+        'axes.labelsize': LABEL_SIZE,
+        'axes.labelweight': LABEL_WEIGHT,
+        'xtick.labelsize': TICK_SIZE,
+        'ytick.labelsize': TICK_SIZE,
+        'figure.titlesize': TITLE_SIZE,
+        'figure.figsize': FIG_SIZE,
+        'axes.grid': True,
+        'grid.alpha': 0.3
+    })
+
+# Apply global style on module load
+apply_plot_style()
+
 # =============================== Dashboard Overview Plots =============================================
 # ----- Amit's Plots -----
 def plot_violation_type_percentage_pie(df):
     """
     Plots the percentage of traffic violation types as a pie chart.
     """
-    sns.set_theme(style='darkgrid')
+    apply_plot_style()
     violation_counts = df['Violation_Type'].value_counts()
     
-    fig, ax = plt.subplots(figsize=(16, 9))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     wedges, texts, autotexts = ax.pie(
         violation_counts,
         autopct='%1.1f%%',
-        colors=sns.color_palette('pastel'),
+        colors=sns.color_palette('tab10'), # Deep colors
         wedgeprops={'edgecolor': 'black'},
         pctdistance=0.85
     )
-    plt.setp(autotexts, size=20, weight="bold")
+    plt.setp(autotexts, size=16, weight="bold") # standard size
     ax.legend(
         wedges, 
         violation_counts.index,
         title="Violation Types",
         loc="center left",
         bbox_to_anchor=(1, 0, 0.5, 1),
-        title_fontsize=20,
-        fontsize=25,
+        title_fontsize=LABEL_SIZE,
+        fontsize=TICK_SIZE,
     )
-    ax.set_title("Percentage of Traffic Violation Types", fontsize=20, fontweight='bold')
+    ax.set_title("Percentage of Traffic Violation Types", fontsize=TITLE_SIZE)
     ax.axis('equal')
     plt.tight_layout()
     return fig
@@ -42,21 +81,22 @@ def plot_fines_based_on_violation_type(summary):
     """
     Plots the fines based on violation type (Paid vs Unpaid).
     """
-    fig, ax = plt.subplots(figsize=(16, 9))
+    apply_plot_style()
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     summary.plot(
         kind='bar',
         stacked=True,
         color=['#FF6B6B', '#4ECDC4'],     # Paid, Unpaid
         edgecolor='black', 
         linewidth=1.5,
-        fontsize=20,
+        fontsize=TICK_SIZE,
         ax=ax
     )
-    ax.set_title('Fines Based on Violation Type', fontweight='bold', fontsize=20)
-    ax.set_xlabel('Violation Type', fontweight='bold', fontsize=20)
-    ax.set_ylabel('Total Fine Amount (₹)',fontweight='bold', fontsize=20)
-    plt.xticks(rotation=20)
-    plt.yticks(rotation=20)
+    ax.set_title('Fines Based on Violation Type', fontsize=TITLE_SIZE)
+    ax.set_xlabel('Violation Type', fontsize=LABEL_SIZE)
+    ax.set_ylabel('Total Fine Amount (₹)', fontsize=LABEL_SIZE)
+    plt.xticks(rotation=25, fontweight=TICK_WEIGHT)
+    plt.yticks(rotation=25, fontweight=TICK_WEIGHT)
 
     # Format Color Bar values, Y-axis values
     ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
@@ -70,12 +110,14 @@ def plot_fines_based_on_violation_type(summary):
         labels = []
         for i, v in enumerate(c):
             height = v.get_height()
-            if height > 0:
-                percentage = (height / totals.iloc[i]) * 100
+            # Avoid division by zero
+            total_val = totals.iloc[i] if i < len(totals) else 0
+            if height > 0 and total_val > 0:
+                percentage = (height / total_val) * 100
                 labels.append(f'{percentage:.1f}%')
             else:
                 labels.append('')
-        ax.bar_label(c, labels=labels, label_type='center', fontsize=10, color='black', rotation=0, fontweight='bold')
+        ax.bar_label(c, labels=labels, label_type='center', fontsize=12, color='black', rotation=0, fontweight='bold')
 
     totals = summary.sum(axis=1)
     for idx, total in enumerate(totals):
@@ -83,7 +125,7 @@ def plot_fines_based_on_violation_type(summary):
             idx,
             summary.iloc[idx].sum() + (max(totals) * 0.02),
             f'{total:,.0f}',
-            ha='center', va='bottom', fontsize=10, fontweight='bold', color='black'
+            ha='center', va='bottom', fontsize=12, fontweight='bold', color='black'
         )
     
     plt.tight_layout()
@@ -93,29 +135,29 @@ def plot_fines_based_on_violation_type(summary):
         bbox_to_anchor=(1, 1.05), 
         loc="upper right", 
         ncol=2,
-        title_fontsize=20,
-        fontsize=20,
+        title_fontsize=LABEL_SIZE,
+        fontsize=TICK_SIZE,
     )
     return fig
 
 # =================================================================================
 def plot_violations_by_location(location_based_violations):
-    sns.set_theme(style='white')
+    apply_plot_style()
     
     # 1. Create subplots to have better control over the object
-    fig, ax = plt.subplots(figsize=(16, 9))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     
     # 2. Plot the pie
     wedges, texts, autotexts = ax.pie(
         location_based_violations['No of Violations'],
         autopct='%1.1f%%',
-        colors=sns.color_palette('pastel'),
+        colors=sns.color_palette('bright'), # Deeper/Vibrant colors
         wedgeprops={'edgecolor': 'black'},
         pctdistance=0.85,
     )
     
     # 3. Handle Text Styling
-    plt.setp(autotexts, size=20, weight="bold")
+    plt.setp(autotexts, size=16, weight="bold")
     
     # 4. Create a legend on the side to utilize the 16:9 width
     ax.legend(
@@ -124,11 +166,11 @@ def plot_violations_by_location(location_based_violations):
         title="Locations",
         loc="center left",
         bbox_to_anchor=(1, 0, 0.5, 1), # This pushes the legend outside to the right
-        title_fontsize=20,
-        fontsize=25,
+        title_fontsize=LABEL_SIZE,
+        fontsize=TICK_SIZE,
     )
     
-    ax.set_title("Violations by Location", fontsize=20, fontweight='bold')
+    ax.set_title("Violations by Location", fontsize=TITLE_SIZE)
     
     # 5. Enforce circular shape
     ax.axis('equal')
@@ -144,23 +186,24 @@ def plot_license_validity_by_gender(df):
     """
     Anshu: License Validity by Gender.
     """
+    apply_plot_style()
     validity_gender = df.groupby(['License_Validity', 'Driver_Gender']).size().unstack(fill_value=0)
     
-    fig, ax = plt.subplots(figsize=(16, 9))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     validity_gender.plot(
         kind='bar', 
         ax=ax,
         edgecolor='black', 
         linewidth=1.5,
-        fontsize=20,
+        fontsize=TICK_SIZE,
     )
 
-    ax.set_title("Number of License Validities by Gender", fontsize=20, fontweight='bold')
-    ax.set_xlabel("License Status", fontsize=20, fontweight='bold')
-    ax.set_ylabel("Count", fontsize=20, fontweight='bold')
-    ax.legend(title="Driver Gender", fontsize=20)
-    plt.xticks(rotation=20)
-    plt.yticks(rotation=20)
+    ax.set_title("Number of License Validities by Gender", fontsize=TITLE_SIZE)
+    ax.set_xlabel("License Status", fontsize=LABEL_SIZE)
+    ax.set_ylabel("Count", fontsize=LABEL_SIZE)
+    ax.legend(title="Driver Gender", fontsize=TICK_SIZE)
+    plt.xticks(rotation=25, fontweight=TICK_WEIGHT)
+    plt.yticks(rotation=25, fontweight=TICK_WEIGHT)
     plt.tight_layout()
     return fig
 
@@ -172,8 +215,8 @@ def plot_gender_distribution(gender_distribution):
     """
     Plots the gender distribution of drivers.
     """
-    sns.set_theme(style='darkgrid')
-    fig, ax = plt.subplots(figsize=(18, 9))
+    apply_plot_style()
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     sns.barplot(
         x=gender_distribution.index, 
         y=gender_distribution.values, 
@@ -184,12 +227,12 @@ def plot_gender_distribution(gender_distribution):
         linewidth=1.5,
         ax=ax
     )
-    ax.set_title('Gender Distribution', fontweight='bold', fontsize=20)
-    ax.set_xlabel('Gender', fontweight='bold', fontsize=20)
-    ax.set_ylabel('Count', fontweight='bold', fontsize=20)
+    ax.set_title('Gender Distribution', fontsize=TITLE_SIZE)
+    ax.set_xlabel('Gender', fontsize=LABEL_SIZE)
+    ax.set_ylabel('Count', fontsize=LABEL_SIZE)
    
-    plt.xticks(rotation=20, fontsize=20)
-    plt.yticks(rotation=20, fontsize=20)
+    plt.xticks(rotation=25, fontweight=TICK_WEIGHT)
+    plt.yticks(rotation=25, fontweight=TICK_WEIGHT)
     return fig
 
 # 2. Vehicle Type vs Violation Type (Monika's Contribution)
@@ -197,22 +240,21 @@ def plot_vehicle_type_vs_violation_type(df):
     """
     Monika: Vehicle type vs Violation Type.
     """
-    sns.set_theme(style='darkgrid')
-    fig, ax = plt.subplots(figsize=(16, 9))
+    apply_plot_style()
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     sns.countplot(
         data=df, 
         x='Violation_Type',
         hue='Vehicle_Type',
         ax=ax,
-        palette='Set2',
+        palette='Set1',
         edgecolor='black'
     )
-    ax.set_title('Vehicle Type vs Violation Type', fontsize=20, fontweight='bold')
-    ax.set_xlabel('Violation Type', fontsize=20, fontweight='bold')
-    ax.set_ylabel('Number of Violations', fontsize=20, fontweight='bold')
-    ax.legend(title='Vehicle Type', fontsize=18, title_fontsize=20, bbox_to_anchor=(1, 1), loc='upper left')
-    plt.xticks(rotation=20, fontsize=15)
-    plt.yticks(fontsize=15)
+    ax.set_title('Vehicle Type vs Violation Type', fontsize=TITLE_SIZE)
+    ax.set_xlabel('Violation Type', fontsize=LABEL_SIZE)
+    ax.set_ylabel('Number of Violations', fontsize=LABEL_SIZE)
+    ax.legend(title='Vehicle Type', fontsize=TICK_SIZE, title_fontsize=LABEL_SIZE, bbox_to_anchor=(1, 1), loc='upper left')
+    plt.xticks(rotation=25, fontweight=TICK_WEIGHT)
     plt.tight_layout()
     return fig
 
@@ -221,6 +263,7 @@ def plot_severity_heatmap_by_location(df):
     """
     Mrunalini: Average Severity Score by Location and Violation Type.
     """
+    apply_plot_style()
     # Helper to calculate severity (Internal logic kept same)
     def calc_severity_score(row):
         severity = 0
@@ -251,10 +294,10 @@ def plot_severity_heatmap_by_location(df):
         aggfunc='mean'
     )
 
-    fig, ax = plt.subplots(figsize=(16, 9))
+    fig, ax = plt.subplots(figsize=FIG_SIZE)
     sns.heatmap(
         location_heatmap, 
-        cmap='coolwarm', 
+        cmap='magma_r', 
         annot=True, 
         fmt=".1f", 
         ax=ax,
@@ -262,10 +305,9 @@ def plot_severity_heatmap_by_location(df):
         linewidths=1,
         linecolor='black',
     )
-    ax.set_title("Average Severity Score by Location and Violation Type", fontsize=20, fontweight='bold')
-    ax.set_xlabel('Violation Type', fontsize=20, fontweight='bold')
-    ax.set_ylabel('Location', fontsize=20, fontweight='bold')
-    plt.xticks(rotation=20, fontsize=15)
-    plt.yticks(fontsize=15)
+    ax.set_title("Average Severity Score by Location and Violation Type", fontsize=TITLE_SIZE)
+    ax.set_xlabel('Violation Type', fontsize=LABEL_SIZE)
+    ax.set_ylabel('Location', fontsize=LABEL_SIZE)
+    plt.xticks(rotation=25, fontweight=TICK_WEIGHT)
     plt.tight_layout()
     return fig

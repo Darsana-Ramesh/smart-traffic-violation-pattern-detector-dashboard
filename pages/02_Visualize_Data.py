@@ -166,7 +166,7 @@ quick_navigator = """
         <div class="nav-links">
             <a class="nav-pill" href="#locations-analysis" target="_self">Locations</a>
             <a class="nav-pill" href="#vehicle-insights" target="_self">Vehicles</a>
-            <a class="nav-pill" href="#fines-and-trends" target="_self">Fines & Trends</a>
+            <a class="nav-pill" href="#fines-amounts" target="_self">Fines Amounts</a>
             <a class="nav-pill" href="#severity-and-risk-analysis" target="_self">Risk and ..</a>
             <a class="nav-pill" href="#environmental-and-road-analysis" target="_self">Environmental</a>
             <a class="nav-pill nav-pill-custom" href="#custom-visualizations" target="_self">Custom</a>
@@ -269,9 +269,7 @@ def render_plot_item(title, insight, plot_func, team_member_name, df_local, key_
             with col_insight:
                 st.markdown("#### 📊 Statistics")
                 st.metric("Total Records", total_records)
-                st.write("Date Range:")
-                st.write(date_range_str)
-                st.divider()
+
                 st.info(f"**Insight:**\n\n{insight}")
             
 
@@ -284,14 +282,14 @@ st.markdown('<h2 id="top-5-locations-violations" style="text-align: center;">Loc
 
 render_plot_item(
     "Top 5 Locations (Violations)", 
-    "Identifies the highest-risk areas with the most violations, useful for targeted enforcement.",
+    "This plot identifies the top 5 locations with the highest number of reported violations. These 'hotspots' indicate areas where traffic enforcement should be prioritized to reduce incident frequency.",
     visualize_plot.plot_top_5_locations_violation,
     "Monika", df, "monika_1"
 )
 
 render_plot_item(
     "Violations by Location (%)", 
-    "Shows the geographical distribution of violations to pinpoint hotspots.",
+    "This pie chart illustrates the percentage distribution of violations across different locations. It provides a visual breakdown of how violations are spread geographically.",
     visualize_plot.plot_violation_by_location_pie,
     "Harika", df, "harika_2"
 )
@@ -306,21 +304,21 @@ st.markdown('<h2 id="vehicle-type-vs-violation-type" style="text-align: center;"
 
 render_plot_item(
     "Vehicle Type vs Violation Type", 
-    "Correlates vehicle categories with specific violation behaviors to understand offender profiles.",
+    "This stacked bar chart correlates vehicle categories with specific violation types. By understanding which vehicles commit which offenses, authorities can strip-profile offender behaviors.",
     visualize_plot.plot_vehicle_type_vs_violation_type,
     "Monika", df, "monika_2"
 )
 
 render_plot_item(
     "Vehicle Risk Analysis", 
-    "Assesses which vehicle types are most prone to accumulating violations.",
+    "This count plot ranks vehicle types based on their total violation frequency. It clearly highlights which specific vehicle classes are the most prone to violating traffic rules.",
     visualize_plot.plot_vehicle_risk_countplot,
     "Sanjana", df, "sanjana_1"
 )
 
 render_plot_item(
     "Fine Paid vs Vehicle Type", 
-    "Shows the distribution of total fines paid across different vehicle categories.",
+    "This pie chart displays the share of total fines contributed by each vehicle type. It helps identify which vehicle categories are responsible for the highest financial penalties.",
     visualize_plot.plot_fine_vs_vehicle_pie,
     "Ishwari", df, "ishwari_1"
 )
@@ -329,27 +327,27 @@ render_plot_item(
 # 💰 FINES
 # ===========================================================================================
 st.markdown("---")
-st.markdown('<h2 id="total-fines-per-year" style="text-align: center;">Fines & Trends</h3>', unsafe_allow_html=True)
+st.markdown('<h2 id="total-fines-per-year" style="text-align: center;">Fines Amounts</h3>', unsafe_allow_html=True)
 
-
-
-render_plot_item(
-    "Fine Amount by Violation Type", 
-    "Compares the average financial penalty associated with different violation categories.",
-    visualize_plot.plot_avg_fine_by_violation_type_2,
-    "Poojitha", df, "poojitha_2"
-)
+# ====================== Removed Plots ====================== 
+# render_plot_item(
+#     "Fine Amount by Violation Type", 
+#     "This scattered distribution compares the average fine amount associated with different violation types. It quickly identifies which infractions carry the heaviest financial penalties on average.",
+#     visualize_plot.plot_avg_fine_by_violation_type_2,
+#     "Poojitha", df, "poojitha_2"
+# )
+# ====================== Removed Plots ====================== 
 
 render_plot_item(
     "Fine Amount vs Weather (Violin Plot)", 
-    "Visualizes the distribution of fine amounts across various weather conditions.",
+    "This violin plot visualizes the density and distribution of fine amounts across various weather conditions. It reveals if severe weather tends to correlate with higher fine amounts.",
     visualize_plot.plot_fine_amount_distribution_vs_weather,
     "Anshu", df, "anshu_1"
 )
 
 render_plot_item(
     "Violation Type Percentage", 
-    "Shows the breakdown of violation types, highlighting the most common infractions.",
+    "This donut/pie chart breaks down the proportion of each violation type relative to the total. It serves as a quick overview to see the most dominating traffic infractions.",
     visualize_plot.plot_violation_type_percentage,
     "Amith", df, "amith_1"
 )
@@ -362,33 +360,36 @@ st.markdown('<h2 id="severity-and-risk-analysis" style="text-align: center;">Ris
 
 render_plot_item(
     "Violation Severity Heatmap", 
-    "Visualizes the intensity of violations across locations based on a severity score.",
+    "This heatmap maps the intensity of violation severity scores across locations. Darker/Inense colors indicate zones with more severe or dangerous traffic violations.",
     visualize_plot.plot_severity_heatmap_by_location,
     "Mrunalini", df, "mrunalini_1"
 )
 
-render_plot_item(
-    "Repeat Offenders", 
-    "Highlights drivers with multiple violations, crucial for identifying habitual offenders.",
-    visualize_plot.plot_repeat_offenders,
-    "Harika", df, "harika_1"
-)
-
+# ====================== Removed Plots ====================== 
+# render_plot_item(
+#     "Repeat Offenders", 
+#     "This bar chart highlights specific drivers (by Violation ID) who have committed multiple offenses. Identifying these habitual offenders is crucial for stricter corrective measures.",
+#     visualize_plot.plot_repeat_offenders,
+#     "Harika", df, "harika_1"
+# )
+# ====================== Removed Plots ====================== 
 
 
 render_plot_item(
     "Age vs Alcohol Heatmap", 
-    "Correlates driver age with alcohol-related incidents to identify at-risk demographics.",
+    "This heatmap correlates driver age groups with recorded alcohol levels. It effectively highlights which demographic groups are most at risk for DUI-related incidents.",
     visualize_plot.plot_age_alcohol_heatmap,
     "Sanjana", df, "sanjana_2"
 )
 
-render_plot_item(
-    "License Validity by Gender", 
-    "Breakdown of license status (Valid/Expired) by driver gender.",
-    visualize_plot.plot_license_validity_by_gender,
-    "Anshu", df, "anshu_2"
-)
+# ====================== Removed Plots ====================== 
+# render_plot_item(
+#     "License Validity by Gender", 
+#     "This grouped bar chart compares the count of valid vs. expired licenses broken down by driver gender. It helps detect if a specific demographic has a higher rate of license non-compliance.",
+#     visualize_plot.plot_license_validity_by_gender,
+#     "Anshu", df, "anshu_2"
+# )
+# ====================== Removed Plots ====================== 
 
 # ===========================================================================================
 # 🌍 ENVIRONMENTAL & ROAD IMPACT
@@ -398,42 +399,44 @@ st.markdown('<h2 id="environmental-and-road-analysis" style="text-align: center;
 
 render_plot_item(
     "Speeding vs Road Condition", 
-    "Analyzes how different road conditions contribute to speeding incidents.",
+    "This bar chart displays the average speed exceeded over the limit under different road conditions. It highlights where drivers are most likely to drive dangerously fast.",
     visualize_plot.plot_speeding_vs_road_condition,
     "Darsana", df, "darsana_1"
 )
 
 render_plot_item(
     "Fines vs Weather (Severity)", 
-    "Examines the relationship between weather severity and the magnitude of fines issued.",
+    "This chart analyzes the relationship between weather conditions and the average fine amount. It helps determine if adverse weather conditions lead to more severe (and expensive) penalties.",
     visualize_plot.plot_fines_vs_weather_severity,
     "Darsana", df, "darsana_2"
 )
 
 render_plot_item(
     "Speed Exceeded vs Weather", 
-    "Shows the tendency to exceed speed limits under various weather conditions.",
+    "This plot measures the average speed above the limit during different weather conditions. It shows exactly when (weather-wise) drivers are most likely to ignore speed limits.",
     visualize_plot.plot_speed_exceeded_vs_weather_2,
     "Poojitha", df, "poojitha_1"
 )
 
 render_plot_item(
     "Violation by Road Condition", 
-    "Relates road quality and conditions to the frequency of violations.",
+    "This pie chart shows the percentage of violations occurring on different road surfaces. It indicates if poor or specific road conditions contribute significantly to traffic counts.",
     visualize_plot.plot_violation_by_road_condition,
     "Rakshitha", df, "rakshitha_2"
 )
 
-render_plot_item(
-    "Weather Impact Heatmap", 
-    "Heatmap illustrating how different weather patterns affect violation occurrences.",
-    visualize_plot.plot_weather_impact_heatmap,
-    "Saniya", df, "saniya_1"
-)
+# ====================== Removed Plots ====================== 
+# render_plot_item(
+#     "Weather Impact Heatmap", 
+#     "This heatmap displays the frequency of specific violation types under different weather conditions. It reveals patterns like 'Are accidents more common in rain?' or 'Do signal violations happen in fog?'.",
+#     visualize_plot.plot_weather_impact_heatmap,
+#     "Saniya", df, "saniya_1"
+# )
+# ====================== Removed Plots ====================== 
 
 render_plot_item(
     "Violation Types vs Weather (Heatmap)", 
-    "Correlation between violation types and specific weather conditions.",
+    "This correlation matrix shows the relationship between violation types and weather conditions. Intensity indicates a strong link between a specific weather type and a specific violation.",
     visualize_plot.plot_violation_types_vs_weather_heatmap,
     "Anshu", df, "anshu_3"
 )

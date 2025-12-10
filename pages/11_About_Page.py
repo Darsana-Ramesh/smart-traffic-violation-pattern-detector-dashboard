@@ -5,148 +5,187 @@ import streamlit as st
 # -----------------------------
 st.set_page_config(
     page_title="About — Smart Traffic Violation Pattern Detector",
+    page_icon="📘",
     layout="wide"
 )
+
+# Custom CSS for styling
+st.markdown("""
+<style>
+    .big-font {
+        font-size: 20px !important;
+        font-weight: 500;
+        color: var(--text-color);
+    }
+    .feature-card {
+        background-color: var(--secondary-background-color);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+    }
+    .feature-title {
+        color: #2E86C1;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # -----------------------------
 # Header Section
 # -----------------------------
-st.title("📘 About — Smart Traffic Violation Pattern Detector")
-st.write("")
+st.title("About Project")
+st.markdown("### Smart Traffic Violation Pattern Detector")
 
-col1, col2 = st.columns([1, 2])
+col1, col2 = st.columns([1.5, 1])
 
 with col1:
- st.markdown("""
-Welcome to the **Smart Traffic Violation Pattern Detector**, an intelligent system designed to enhance road safety through **data-driven insights**.
+    st.markdown("""
+    <div class="big-font">
+    Welcome to the <b>Smart Traffic Violation Pattern Detector</b>, an intelligent system designed to enhance road safety through <b>data-driven insights</b>.
+    <br><br>
+    This project utilizes:
+    <ul>
+        <li><i>Advanced Analytics</i></li>
+        <li><i>Smart Dashboards</i></li>
+        <li><i>Data Processing</i></li>
+        <li><i>Data Visualization</i></li>
+    </ul>
+    Our aim is to help authorities <b>identify patterns</b>, reduce accidents, and improve city-wide traffic management.
+    </div>
+    """, unsafe_allow_html=True)
 
-This project utilizes:  
-- 📊 *Advanced Analytics*  
-- 🤖 *Machine Learning*  
-- 📈 *Smart Dashboards*  
-
-Our aim is to help authorities **identify patterns**, reduce accidents, and improve city-wide traffic management.
-    """)
 with col2:
- 
-    st.image("Assets/image.png", width=1000)
+    st.image("assets/image.png", width='stretch')
 
-st.markdown("---")
+st.divider()
 
 # -----------------------------
-# Expanders Section
+# Mission & Vision (Columns)
 # -----------------------------
+c1, c2 = st.columns(2)
+with c1:
+    with st.container(border=True):
+        st.subheader("Our Mission")
+        st.markdown("To revolutionize urban traffic management by empowering authorities with a **robust, scalable, and data-centric platform**. We aim to eliminate manual inefficiencies, ensure precise violation detection, and foster a culture of road safety through **actionable intelligence**.")
 
-# ---- Who We Are ----
-with st.expander("👨‍💻 Who We Are", expanded=False):
-    st.markdown("""
-We are a team of developers and data analysts committed to creating effective, real-world technology solutions.
+with c2:
+    with st.container(border=True):
+        st.subheader("Our Vision")
+        st.markdown("To become the standard in **smart city traffic governance**, where advanced analytics and automation converge to create **zero-accident ecosystems**, ensuring seamless compliance and safer roads for every citizen.")
 
-We specialize in:
-- 🐍 **Python Development**
--  🎛 **Streamlit Dashboards**
-- 🤖 **Machine Learning**
-- 📊 **Data Visualization & Analytics**
+st.divider()
 
-Our mission is to make traffic monitoring **smarter, faster, and more reliable**.
-    """)
-
-# ---- What We Do ----
-with st.expander("🛠️ What We Do", expanded=False):
-    st.markdown("""
-### ✔ Automated Data Processing  
-Cleans, structures and analyzes large-scale traffic violation data automatically.
-
-### ✔ Violation Severity Scoring  
-Applies custom severity levels to each violation type.
-
-### ✔ Risk Index Calculation  
-Computes risk score per vehicle based on cumulative violations.
-
-### ✔ Pattern & Trend Detection  
-Finds:
-- Most common violations  
-- Violation combinations  
-- Peak time for rule-breaking  
-- High-risk vehicles & regions  
-
-### ✔ Interactive Visualizations  
-Includes:
-- Hour-wise violations  
-- Severity distribution  
-- Vehicle-type trends  
-- Fine contribution analytics  
-
-### ✔ Predictive ML Insights *(Optional)*  
-Predicts:
-- Future violations  
-- Risky behavior patterns  
-    """)
-
-# ---- Mission ----
-with st.expander("🎯 Our Mission"):
-    st.markdown("""
-To empower traffic authorities with a **data-driven, scalable, and reliable** system that reduces manual work and improves road safety.
-    """)
-
-# ---- Vision ----
-with st.expander("🌍 Our Vision"):
-    st.markdown("""
-A future where **technology & analytics** work together to minimize road accidents, ensure better compliance, and build **safer, smarter cities**.
-    """)
-
-# ---- Why It Matters ----
-with st.expander("🚦 Why This Project Matters"):
-    st.markdown("""
-- Urban traffic is increasing rapidly  
-- Manual monitoring is slow and inefficient  
-- Data reveals hidden patterns humans may miss  
-- Helps prevent violations and save lives  
-- Brings **transparency, accuracy & intelligence** to traffic systems  
-    """)
 # -----------------------------
-# Technologies Used
+# What We Do (Expanders)
 # -----------------------------
-with st.expander("🧩 Technologies & Libraries Used", expanded=False):
-    st.markdown("""
-### ✔ **Python Libraries**
-- **Pandas** – Data cleaning & manipulation  
-- **NumPy** – Numerical operations  
-- **Matplotlib** – Static charts  
-- **Seaborn** – Statistical visualizations  
-- **Plotly (Optional)** – Interactive charts  
-- **Scikit-learn** – Machine learning  
-- **Collections / Counter** – Pattern analysis  
-- **Datetime** – Time-based processing  
+st.subheader("Our Features & Solutions")
+col_feat1, col_feat2 = st.columns(2)
 
-### ✔ **Frameworks & Tools**
-- **Streamlit** – Web dashboards  
-- **VS Code** – Development environment  
-- **Google Colab** – Exploratory analysis  
-- **Jupyter Notebook** – Prototyping  
-- **GitHub** – Version control  
-    """)
+with col_feat1:
+    with st.expander("Automated Data Processing & Scoring", expanded=True):
+        st.markdown("""
+        *   **Cleaning:** Cleans, structures and analyzes large-scale traffic violation data automatically.
+        *   **Severity:** Applies custom severity levels to each violation type.
+        *   **Risk Index:** Computes risk score per vehicle based on cumulative violations.
+        """)
+    
+    with st.expander("Pattern & Trend Detection", expanded=True):
+        st.markdown("""
+        *   **Common Violations:** Finds most frequent offenses.
+        *   **Peak Times:** Identifies peak time for rule-breaking.
+        *   **High-Risk:** Pinpoints high-risk vehicles & regions.
+        """)
+
+with col_feat2:
+    with st.expander("Interactive Visualizations", expanded=True):
+        st.markdown("""
+        *   **Time-Series:** Hour-wise and monthly violation trends.
+        *   **Severity metrics:** Distribution of violation severity.
+        *   **Demographics:** Vehicle-type and driver trends.
+        *   **Financials:** Fine contribution analytics.
+        """)
+
+    with st.expander("Data Export & Reporting", expanded=True):
+        st.markdown("""
+        *   **Raw Data:** View and filter raw datasets.
+        *   **Exports:** Support for data extraction.
+        *   **Summaries:** Comprehensive statistical summaries.
+        """)
+
+st.divider()
+
 # -----------------------------
-# Contributors Section
+# Technologies (Container)
 # -----------------------------
-st.header("🤝 Contributors")
+st.subheader("Technologies & Libraries Used")
+with st.container(border=True):
+    t1, t2, t3 = st.columns(3, border=True)
+    with t1:
+        st.markdown("#### Frontend Used")
+        st.markdown("""
+        - **Streamlit** - Web Dashboard Framework  
+        - **HTML/CSS** - Custom Styling  
+        - **Vector Graphics** - UI Assets  
+        """)
+    with t2:
+        st.markdown("#### Backend Logic")
+        st.markdown("""
+        - **Python** - Core Logic  
+        - **Pandas** - Data Manipulation  
+        - **NumPy** - Numerical Operations  
+        """)
+    with t3:
+        st.markdown("#### Data Management")
+        st.markdown("""
+        - **CSV/JSON** - Data Storage  
+        - **Matplotlib/Seaborn** - Visualization Engine  
+        - **Folium** - Geospatial Mapping  
+        """)
 
-st.write("**Ishwari** - Software Developer")
-st.write("**Saidul** - ML Engineer")
-st.write("**Anshu** - Backend Developer")
-st.write("**Mrunali** - ML Engineer")
-st.write("**Sanjana** - ML Engineer")
-st.write("**Poojitha** - Data Analyst & Streamlit Developer")
-st.write("**Divija** - ML Engineer")
-st.write("**Amit** - Backend Developer")
-st.write("**Rakshitha** - Streamlit Developer")
-st.write("**Harika** - ML Engineer")
-st.write("**Vijay** - Data Analyst & Streamlit Developer")
-st.write("**Mehek** - Streamlit Developer")
-st.write("**Darsana** - Backend Developer")
-st.write("**Monika** - ML Engineer")
-st.write("**Monika** - Streamlit Developer")
+st.divider()
 
-st.markdown("---")
+# -----------------------------
+# Why It Matters (Info)
+# -----------------------------
+st.subheader("Why This Project Matters")
+st.expander("Why it Matters", expanded=True).markdown("""
+*   Urban traffic is increasing rapidly.
+*   Manual monitoring is slow and inefficient.
+*   Data reveals hidden patterns humans may miss.
+*   Helps prevent violations and save lives.
+*   Brings **transparency, accuracy & intelligence** to traffic systems.
+""")
 
-st.success("✨ About Page Loaded Successfully!")
+# -----------------------------
+# Future Roadmap (New Section)
+# -----------------------------
+st.subheader("Future Roadmap")
+with st.container(border=True):
+    r1, r2 = st.columns(2)
+    
+    with r1:
+        st.markdown("""
+        **1. Real-time Database Integration**  
+        Move from flat CSV files to SQL (PostgreSQL/MySQL) or NoSQL (MongoDB) for scalability.
+        
+        **2. AI/ML Forecasting**  
+        Implement predictive models (ARIMA/Prophet) to forecast future violation hotspots and revenue.
+        
+        **3. Role-Based Access Control (RBAC)**  
+        Secure login for admins, officers, and public viewers.
+        """)
+        
+    with r2:
+        st.markdown("""
+        **4. Automated Reporting**  
+        Generate and email PDF/Excel reports to authorities automatically on a schedule.
+        
+        **5. Live Camera Feed Integration**  
+        Connect to traffic camera APIs for real-time violation detection integration.
+        """)
+        
+st.divider()
+

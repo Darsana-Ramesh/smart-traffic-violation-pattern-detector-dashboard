@@ -72,9 +72,9 @@ def dashboard() -> None:
                 st.metric(label="Total Violations", value=summary.get('total_no_of_violations'))
                 
             with sub_col2:
-                st.metric(label="Avg Violations/Day", value=f"{int(summary.get('total_no_of_violations')/no_of_days_for_summary)}")
+                st.metric(label="Violations/Day", value=f"{int(summary.get('total_no_of_violations')/no_of_days_for_summary)}")
             with sub_col3:
-                st.metric(label="Avg Violations/Vehicle", value=f"{int(summary.get('total_no_of_violations')/df_last_n_days['Vehicle_Type'].nunique())}")
+                st.metric(label="Violations/VehicleType", value=f"{int(summary.get('total_no_of_violations')/df_last_n_days['Vehicle_Type'].nunique())}")
             st.markdown('---')
             
     # ==========================================================================================================
@@ -105,13 +105,11 @@ def dashboard() -> None:
                 st.markdown("<h3 style='text-align: center;'>Fines Distribution</h3>", unsafe_allow_html=True)
                 st.pyplot(fine_summary.get('fig'), width='stretch')
             # Metrics
-            sub_col1, sub_col2, sub_col3 = st.columns(3, border=True)
+            sub_col1, sub_col2 = st.columns(2, border=True)
             with sub_col1:
                 st.metric(label="Total Fines", value=f"Rs.{fine_summary.get('total_fines')}")
             with sub_col2:
                 st.metric(label="Average Fines per Day", value=f"Rs.{int(fine_summary.get('total_fines')/no_of_days_for_summary)}")
-            with sub_col3:
-                st.metric(label="Average Fines per Violation", value=f"Rs.{int(fine_summary.get('avg_fine_per_violation'))}")
             st.markdown('---')
 
     # ==========================================================================================================
