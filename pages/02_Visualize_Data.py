@@ -167,7 +167,7 @@ quick_navigator = """
             <a class="nav-pill" href="#locations-analysis" target="_self">Locations</a>
             <a class="nav-pill" href="#vehicle-insights" target="_self">Vehicles</a>
             <a class="nav-pill" href="#fines-amounts" target="_self">Fines Amounts</a>
-            <a class="nav-pill" href="#severity-and-risk-analysis" target="_self">Risk and ..</a>
+            <a class="nav-pill" href="#risk-and-severity-analysis" target="_self">Risk and ..</a>
             <a class="nav-pill" href="#environmental-and-road-analysis" target="_self">Environmental</a>
             <a class="nav-pill nav-pill-custom" href="#custom-visualizations" target="_self">Custom</a>
         </div>
@@ -356,7 +356,7 @@ render_plot_item(
 # 🔥 RISK & DEMOGRAPHICS
 # ===========================================================================================
 st.markdown("---")
-st.markdown('<h2 id="severity-and-risk-analysis" style="text-align: center;">Risk & Demographics Analysis</h3>', unsafe_allow_html=True)
+st.markdown('<h2 id="severity-and-risk-analysis" style="text-align: center;">Risk & Severity Analysis</h3>', unsafe_allow_html=True)
 
 render_plot_item(
     "Violation Severity Heatmap", 
@@ -460,63 +460,73 @@ st.markdown("### Custom Bar/Count Plot")
 with st.expander("Custom Bar/Count Plot", expanded=True):
     st.markdown("Create a bar plot to compare a numerical value across categories, or a count plot for category frequencies.")
     
-    # --- Bar Plot Controls ---
-    all_categorical_cols = [col for col in df.columns if df[col].dtype == 'object' and df[col].nunique() < 100]
-    all_numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
+    with st.form(key="bar_plot_form"):
+        # --- Bar Plot Controls ---
+        all_categorical_cols = [col for col in df.columns if df[col].dtype == 'object' and df[col].nunique() < 100]
+        all_numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
 
-    if not all_categorical_cols:
-        st.warning("No suitable categorical columns found for the X-axis of a bar plot.")
-    else:
-        # --- Axis Selectors ---
-        col1, col2 = st.columns(2)
-        with col1:
-            x_col_bar = st.selectbox("Select X-axis (Categorical)", options=all_categorical_cols, key="bar_x")
-        with col2:
-            y_options = ['Count'] + all_numerical_cols
-            y_col_bar = st.selectbox("Select Y-axis (Numerical or Count)", options=y_options, key="bar_y")
+        if not all_categorical_cols:
+            st.warning("No suitable categorical columns found for the X-axis of a bar plot.")
+        else:
+            # --- Axis Selectors ---
+            col1, col2 = st.columns(2)
+            with col1:
+                x_col_bar = st.selectbox("Select X-axis (Categorical)", options=all_categorical_cols, key="bar_x")
+            with col2:
+                y_options = ['Count'] + all_numerical_cols
+                y_col_bar = st.selectbox("Select Y-axis (Numerical or Count)", options=y_options, key="bar_y")
 
-        # --- Date Range Selector ---
-        bar_start_date, bar_end_date = None, None
-        plot_df_bar = df.copy()
-        try:
-            if 'Date' in df.columns:
-                plot_df_bar['Date'] = pd.to_datetime(plot_df_bar['Date'], errors='coerce')
-                plot_df_bar.dropna(subset=['Date'], inplace=True)
-                if not plot_df_bar['Date'].empty:
-                    min_date_bar = plot_df_bar['Date'].min().date()
-                    max_date_bar = plot_df_bar['Date'].max().date()
-                    
-                    c1, c2 = st.columns(2)
-                    with c1:
-                        bar_start_date = st.date_input("Start date", min_date_bar, min_value=min_date_bar, max_value=max_date_bar, key="bar_start")
-                    with c2:
-                        bar_end_date = st.date_input("End date", max_date_bar, min_value=min_date_bar, max_value=max_date_bar, key="bar_end")
-            else:
-                st.info("No 'Date' column found or date conversion failed. Cannot filter by date.")
-        except Exception as e:
-            st.error(f"Error processing 'Date' column for Bar Plot: {e}")
+            # --- Date Range Selector ---
+            bar_start_date, bar_end_date = None, None
+            plot_df_bar = df.copy()
+            # Date filtering setup (simplified for form context if needed, but keeping logic)
+            # Note: Inputs in form is fine.
 
-        if st.button("Generate Bar Plot"):
-            # --- Plotting Logic ---
-            if bar_start_date and bar_end_date and bar_start_date > bar_end_date:
-                st.error("Error: End date must fall after start date.")
-            else:
-                # Filter by date if applicable
-                if bar_start_date and bar_end_date:
-                    plot_df_bar = plot_df_bar[(plot_df_bar['Date'].dt.date >= bar_start_date) & (plot_df_bar['Date'].dt.date <= bar_end_date)]
-                
-                if plot_df_bar.empty:
-                    st.warning("No data available for the selected criteria.")
+            # Determine date range defaults outside if possible or inside. 
+            # Ideally we calculate min/max once, but logic is intertwined. 
+            # We'll just wrap the inputs.
+            
+            try:
+                if 'Date' in df.columns:
+                    plot_df_bar['Date'] = pd.to_datetime(plot_df_bar['Date'], errors='coerce')
+                    plot_df_bar.dropna(subset=['Date'], inplace=True)
+                    if not plot_df_bar['Date'].empty:
+                        min_date_bar = plot_df_bar['Date'].min().date()
+                        max_date_bar = plot_df_bar['Date'].max().date()
+                        
+                        c1, c2 = st.columns(2)
+                        with c1:
+                            bar_start_date = st.date_input("Start date", min_date_bar, min_value=min_date_bar, max_value=max_date_bar, key="bar_start")
+                        with c2:
+                            bar_end_date = st.date_input("End date", max_date_bar, min_value=min_date_bar, max_value=max_date_bar, key="bar_end")
                 else:
-                    fig = visualize_plot.plot_bar_or_count(plot_df_bar, x_col_bar, y_col_bar)
-                    st.pyplot(fig, width='stretch')
+                    st.info("No 'Date' column found or date conversion failed. Cannot filter by date.")
+            except Exception as e:
+                st.error(f"Error processing 'Date' column for Bar Plot: {e}")
 
-                    # Display the underlying data in an expander
-                    with st.expander("View Data"):
-                        if y_col_bar == 'Count':
-                            st.dataframe(plot_df_bar[x_col_bar].value_counts())
-                        else:
-                            st.dataframe(plot_df_bar.groupby(x_col_bar)[y_col_bar].mean())
+        submit_bar = st.form_submit_button("Generate Bar Plot")
+
+    if submit_bar:
+        # --- Plotting Logic ---
+        if bar_start_date and bar_end_date and bar_start_date > bar_end_date:
+            st.error("Error: End date must fall after start date.")
+        else:
+            # Filter by date if applicable
+            if bar_start_date and bar_end_date:
+                plot_df_bar = plot_df_bar[(plot_df_bar['Date'].dt.date >= bar_start_date) & (plot_df_bar['Date'].dt.date <= bar_end_date)]
+            
+            if plot_df_bar.empty:
+                st.warning("No data available for the selected criteria.")
+            else:
+                fig = visualize_plot.plot_bar_or_count(plot_df_bar, x_col_bar, y_col_bar)
+                st.pyplot(fig, width='stretch')
+
+                # Display the underlying data in an expander
+                with st.expander("View Data"):
+                    if y_col_bar == 'Count':
+                        st.dataframe(plot_df_bar[x_col_bar].value_counts())
+                    else:
+                        st.dataframe(plot_df_bar.groupby(x_col_bar)[y_col_bar].mean())
 
 # ------------------------------
 # CORRELATION ANALYSIS
@@ -525,35 +535,38 @@ st.markdown("---")
 st.markdown("### Custom Correlation Analysis Heatmap Plot")
 
 with st.expander("Custom Correlation Analysis Heatmap Plot", expanded=True):    
-    # --- Date Range Selector ---
-    corr_start_date, corr_end_date = None, None
-    plot_df_corr = df.copy()
-    
-    date_filter_applied = False
-    
-    try:
-        if 'Date' in df.columns:
-            plot_df_corr['Date'] = pd.to_datetime(plot_df_corr['Date'], errors='coerce')
-            plot_df_corr.dropna(subset=['Date'], inplace=True)
-            if not plot_df_corr['Date'].empty:
-                min_date_corr = plot_df_corr['Date'].min().date()
-                max_date_corr = plot_df_corr['Date'].max().date()
-                
-                c1, c2 = st.columns(2)
-                with c1:
-                    corr_start_date = st.date_input("Start date", min_date_corr, min_value=min_date_corr, max_value=max_date_corr, key="corr_start")
-                with c2:
-                    corr_end_date = st.date_input("End date", max_date_corr, min_value=min_date_corr, max_value=max_date_corr, key="corr_end")
-                date_filter_applied = True
+    with st.form(key="corr_plot_form"):
+        # --- Date Range Selector ---
+        corr_start_date, corr_end_date = None, None
+        plot_df_corr = df.copy()
+        
+        date_filter_applied = False
+        
+        try:
+            if 'Date' in df.columns:
+                plot_df_corr['Date'] = pd.to_datetime(plot_df_corr['Date'], errors='coerce')
+                plot_df_corr.dropna(subset=['Date'], inplace=True)
+                if not plot_df_corr['Date'].empty:
+                    min_date_corr = plot_df_corr['Date'].min().date()
+                    max_date_corr = plot_df_corr['Date'].max().date()
+                    
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        corr_start_date = st.date_input("Start date", min_date_corr, min_value=min_date_corr, max_value=max_date_corr, key="corr_start")
+                    with c2:
+                        corr_end_date = st.date_input("End date", max_date_corr, min_value=min_date_corr, max_value=max_date_corr, key="corr_end")
+                    date_filter_applied = True
+                else:
+                    st.info("No valid dates found in 'Date' column. Showing correlation for entire dataset.")
             else:
-                st.info("No valid dates found in 'Date' column. Showing correlation for entire dataset.")
-        else:
-            st.info("No 'Date' column found. Showing correlation for entire dataset.")
-    except Exception as e:
-        st.error(f"Error processing 'Date' column for Correlation Plot: {e}")
+                st.info("No 'Date' column found. Showing correlation for entire dataset.")
+        except Exception as e:
+            st.error(f"Error processing 'Date' column for Correlation Plot: {e}")
 
-    # Generate Button
-    if st.button("Generate Correlation Heatmap"):
+        submit_corr = st.form_submit_button("Generate Correlation Heatmap")
+
+    # Generate Button Interaction
+    if submit_corr:
         # Filter by date if applicable
         if date_filter_applied and corr_start_date and corr_end_date:
              if corr_start_date > corr_end_date:
@@ -583,31 +596,34 @@ st.markdown("---")
 st.markdown("### Custom Pair Plot Analysis")
 
 with st.expander("Pair Plot Analysis", expanded=True):
-    # Get numerical and a few categorical columns for selection
-    numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
-    categorical_cols = [col for col in df.columns if df[col].dtype == 'object' and df[col].nunique() < 10]
-    selectable_cols = numerical_cols + categorical_cols
+    with st.form(key="pair_plot_form"):
+        # Get numerical and a few categorical columns for selection
+        numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
+        categorical_cols = [col for col in df.columns if df[col].dtype == 'object' and df[col].nunique() < 10]
+        selectable_cols = numerical_cols + categorical_cols
 
-    # --- Set new defaults as requested by the user ---
-    # Default columns for the pair plot
-    user_default_cols = ['Fine_Amount','Vehicle_Model_Year','Speed_Limit','Recorded_Speed','Alcohol_Level','Towed_num','Fine_Paid_num','Court_Appearance_num']
-    valid_default_cols = [col for col in user_default_cols if col in selectable_cols]
+        # --- Set new defaults as requested by the user ---
+        # Default columns for the pair plot
+        user_default_cols = ['Fine_Amount','Vehicle_Model_Year','Speed_Limit','Recorded_Speed','Alcohol_Level','Towed_num','Fine_Paid_num','Court_Appearance_num']
+        valid_default_cols = [col for col in user_default_cols if col in selectable_cols]
 
-    # Default column for the hue
-    user_default_hue = 'Violation_Type'
-    
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        selected_cols = st.multiselect("Select columns for Pair Plot", options=selectable_cols, default=valid_default_cols)
-    with col2:
-        hue_options = [None] + categorical_cols
-        # Set the default hue if it's a valid option
-        hue_index = 0 # Default to None
-        if user_default_hue in hue_options:
-            hue_index = hue_options.index(user_default_hue)
-        selected_hue = st.selectbox("Select column for color (hue)", options=hue_options, index=hue_index)
+        # Default column for the hue
+        user_default_hue = 'Violation_Type'
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            selected_cols = st.multiselect("Select columns for Pair Plot", options=selectable_cols, default=valid_default_cols)
+        with col2:
+            hue_options = [None] + categorical_cols
+            # Set the default hue if it's a valid option
+            hue_index = 0 # Default to None
+            if user_default_hue in hue_options:
+                hue_index = hue_options.index(user_default_hue)
+            selected_hue = st.selectbox("Select column for color (hue)", options=hue_options, index=hue_index)
 
-    if st.button("Generate Pair Plot"):
+        submit_pair = st.form_submit_button("Generate Pair Plot")
+
+    if submit_pair:
         if not selected_cols:
             st.error("Please select at least one column to plot.")
         elif len(selected_cols) > 5:
@@ -620,6 +636,7 @@ with st.expander("Pair Plot Analysis", expanded=True):
                     if selected_hue:
                         plot_df[selected_hue] = df[selected_hue]
 
+                    # Note: sns.pairplot is figure-level, returns PairGrid
                     pair_plot_fig = sns.pairplot(plot_df, hue=selected_hue, corner=True, diag_kind='kde')
                     st.pyplot(pair_plot_fig, width='stretch')
                 except Exception as e:
