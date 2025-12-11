@@ -9,9 +9,6 @@ This project is a Streamlit web application designed to analyze traffic violatio
 > * **[1. System Architecture (Basic)](PROJECT_DOCUMENTATIONS/PROJECT_BLUEPRINT_1-BASIC.md)**: High-level overview, architecture diagrams, and directory structure.
 > * **[2. Page Development Details](PROJECT_DOCUMENTATIONS/PROJECT_BLUEPRINT_2-PAGE_DEVELOPMENT_DETAILS.md)**: In-depth analysis of each page, purpose, and dependencies.
 > * **[3. Visual Diagrams](PROJECT_DOCUMENTATIONS/PROJECT_BLUEPRINT_3-VISUAL_DIAGRAMS.md)**: Detailed Architecture, Data Flow, and Component Interaction diagrams.
-> * **[4. Agile Documentation](PROJECT_DOCUMENTATIONS/PROJECT_BLUEPRINT_4-AGILE_DOCUMENTATION.md)**: Product Backlogs, Team Roles, Sprints, and Defect Trackers.
-> * **[4A. Code Quality Report](PROJECT_DOCUMENTATIONS/PROJECT_BLUEPRINT_4-CODE_QUALITY.md)**: Detailed component-level analysis of code architecture and metrics.
-> * **[5. Workflow Timeline](PROJECT_DOCUMENTATIONS/PROJECT_BLUEPRINT_5-WORKFLOW_TIMELINE.md)**: Chronological project history and updates.
 
 ## 🎯 Features
 
